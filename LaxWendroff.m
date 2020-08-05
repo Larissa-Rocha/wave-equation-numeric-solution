@@ -1,39 +1,39 @@
 clc
 clear all
-%% Equação da onda - Lax-Wendroff
+%% Wave equation - Lax-Wendroff
 
-%Variáveis
-c = 1.0;          %velocidade da onda
-L = 40.0;         %comprimento do domínio
-NX = 41;          %número de pontos da malha
-dx = L / (NX-1);  %passo de espaço 
-t = 0.0;          %tempo
-t_f = 18.0;       %tempo final
-n = 3;            %número da onda
-ni = 1;         %número de Courant
-dt = ni*(dx/c);   %passo de tempo
-k_m = (n*pi)/L;   %número de onda
-A_0 = 1;          %amplitude inicial
+%Variables
+c = 1.0;          %wave velocity
+L = 40.0;         %lenght
+NX = 41;          %number of nodes
+dx = L / (NX-1);  %space step 
+t = 0.0;          %time
+t_f = 18.0;       %final time
+n = 3;            %wave number
+ni = 1;         %Courant number
+dt = ni*(dx/c);   %time step
+k_m = (n*pi)/L;   %wave number
+A_0 = 1;          %initial amplitude
 
-%Discretização do domínio
+%DiscretizaÃ§Ã£o do domÃ­nio
 i = 1 : NX;
-x = (i - 1)*dx;   %domínio espacial
+x = (i - 1)*dx;   %domÃ­nio espacial
 
-%Condição inicial (Para t=0)
+%CondiÃ§Ã£o inicial (Para t=0)
 u_0 = sin(2 * n * pi * ( x / L ));
 u = u_0;
 u_num = u_0;
 
-%Solução
+%SoluÃ§Ã£o
 %Loop no tempo
 NT = t_f / dt;
 for k = 1 : NT
     
-    for j = 2 : NX-1    %Loop no espaço
+    for j = 2 : NX-1    %Loop no espaÃ§o
         u_num(j) = u(j)-(ni/2)*(u(j+1)-u(j-1))-(ni^2/2)*(u(j+1)-2*u(j)+u(j-1)); %Esquema Lax-Wendroff  
     end
     
-    %Condições de contorno periódicas
+    %CondiÃ§Ãµes de contorno periÃ³dicas
     u_num(1) = u(1)-(ni/2)*(u(2)-u(NX-1))-(ni^2/2)*(u(2)-2*u(1)+u(NX-1));
     u_num(NX) = u_num(1);
     
@@ -41,7 +41,7 @@ for k = 1 : NT
     t = t + dt;
     u = u_num;
     
-    %Solução analítica
+    %SoluÃ§Ã£o analÃ­tica
     u_ana = sin ( 2 * n * pi * ((x - c*t) / L));
     
     %Plotando os resultados
@@ -51,6 +51,6 @@ for k = 1 : NT
     hold off
     title('Lax Wendroff: n=3 e ni=1');
     grid on;
-    xlabel('Número de nós');
+    xlabel('NÃºmero de nÃ³s');
     ylabel('u(x,t)');
 end
